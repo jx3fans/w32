@@ -924,8 +924,6 @@ func ChangeDisplaySettingsEx(szDeviceName *uint16, devMode *DEVMODE, hwnd HWND, 
 
 func SendInput(inputs []INPUT) uint32 {
   var err error
-  var size int
-
   var validInputs [][INPUT_MAX_SIZE]byte
 
 	for _, oneInput := range inputs {
@@ -935,15 +933,15 @@ func SendInput(inputs []INPUT) uint32 {
 		switch oneInput.Type {
 		case INPUT_MOUSE:
       input := MouseInput{typ: oneInput.Type, mi: oneInput.Mi}
-      size, err = binary.Write(inputBuffer, binary.LittleEndian, input)
+      err = binary.Write(inputBuffer, binary.LittleEndian, input)
 			//(*MouseInput)(unsafe.Pointer(&input)).mi = oneInput.Mi
 		case INPUT_KEYBOARD:
       input := KbdInput{typ: oneInput.Type, ki: oneInput.Ki}
-      size, err = binary.Write(inputBuffer, binary.LittleEndian, input)
+      err = binary.Write(inputBuffer, binary.LittleEndian, input)
 			//(*KbdInput)(unsafe.Pointer(&input)).ki = oneInput.Ki
 		case INPUT_HARDWARE:
       input := HardwareInput{typ: oneInput.Type, hi: oneInput.Hi}
-      size, err = binary.Write(inputBuffer, binary.LittleEndian, input)
+      err = binary.Write(inputBuffer, binary.LittleEndian, input)
 			//(*HardwareInput)(unsafe.Pointer(&input)).hi = oneInput.Hi
 		default:
 			panic("unkown type")
@@ -960,7 +958,7 @@ func SendInput(inputs []INPUT) uint32 {
 	ret, _, _ := procSendInput.Call(
 		uintptr(len(validInputs)),
 		uintptr(unsafe.Pointer(&validInputs[0])),
-		uintptr(maxSize),
+		uintptr(INPUT_MAX_SIZE),
 	)
 	return uint32(ret)
 }
