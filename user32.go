@@ -930,18 +930,20 @@ func SendInput(inputs []INPUT) uint32 {
     inputBuffer := &bytes.Buffer{}
 		//input := C.INPUT{_type: C.DWORD(oneInput.Type)}
 
+    err = binary.Write(inputBuffer, binary.LittleEndian, oneInput.Type)
+    if err != nil {
+      panic(err)
+    }
+
 		switch oneInput.Type {
 		case INPUT_MOUSE:
-      input := MouseInput{typ: oneInput.Type, mi: oneInput.Mi}
-      err = binary.Write(inputBuffer, binary.LittleEndian, input)
+      err = binary.Write(inputBuffer, binary.LittleEndian, oneInput.Mi)
 			//(*MouseInput)(unsafe.Pointer(&input)).mi = oneInput.Mi
 		case INPUT_KEYBOARD:
-      input := KbdInput{typ: oneInput.Type, ki: oneInput.Ki}
-      err = binary.Write(inputBuffer, binary.LittleEndian, input)
+      err = binary.Write(inputBuffer, binary.LittleEndian, oneInput.Ki)
 			//(*KbdInput)(unsafe.Pointer(&input)).ki = oneInput.Ki
 		case INPUT_HARDWARE:
-      input := HardwareInput{typ: oneInput.Type, hi: oneInput.Hi}
-      err = binary.Write(inputBuffer, binary.LittleEndian, input)
+      err = binary.Write(inputBuffer, binary.LittleEndian, oneInput.Hi)
 			//(*HardwareInput)(unsafe.Pointer(&input)).hi = oneInput.Hi
 		default:
 			panic("unkown type")
