@@ -951,12 +951,10 @@ func SendInput(inputs []INPUT) uint32 {
 
     if err != nil { panic(err) }
 
-    padding := make([]byte, INPUT_MAX_SIZE - size)
-    _, err = binary.Write(inputBuffer, binary.LittleEndian, padding)
+    var inputsArray [INPUT_MAX_SIZE]byte
+    copy(inputsArray[:], inputBuffer.Bytes())
 
-    if err != nil { panic(err) }
-
-		validInputs = append(validInputs, inputBuffer.Bytes())
+		validInputs = append(validInputs, inputsArray)
 	}
 
 	ret, _, _ := procSendInput.Call(
