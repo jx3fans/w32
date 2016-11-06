@@ -926,7 +926,7 @@ func SendInput(inputs []INPUT) uint32 {
   var err error
   var size int
 
-  smi, ski, shi := sizeof(MouseInput), sizeof(KbdInputf), sizeof(HardwareInput)
+  smi, ski, shi := unsafe.Sizeof(MouseInput), unsafe.Sizeof(KbdInputf), unsafe.Sizeof(HardwareInput)
   maxSize := smi
   if ski > maxSize { maxSize := ski }
   if shi > maxSize { maxSize := shi }
