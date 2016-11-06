@@ -926,12 +926,7 @@ func SendInput(inputs []INPUT) uint32 {
   var err error
   var size int
 
-  smi, ski, shi := unsafe.Sizeof(MouseInput{}), unsafe.Sizeof(KbdInput{}), unsafe.Sizeof(HardwareInput{})
-  maxSize := smi
-  if ski > maxSize { maxSize := ski }
-  if shi > maxSize { maxSize := shi }
-  var validInputs [][maxSize]byte
-
+  var validInputs [][INPUT_MAX_SIZE]byte
 
 	for _, oneInput := range inputs {
     inputBuffer := &bytes.Buffer{}
@@ -956,7 +951,7 @@ func SendInput(inputs []INPUT) uint32 {
 
     if err != nil { panic(err) }
 
-    padding := make([]byte, maxSize - size)
+    padding := make([]byte, INPUT_MAX_SIZE - size)
     _, err = binary.Write(inputBuffer, binary.LittleEndian, padding)
 
     if err != nil { panic(err) }

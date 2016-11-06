@@ -879,6 +879,8 @@ type HARDWAREINPUT struct {
 	WParamH uint16
 }
 
+const INPUT_MAX_SIZE = 40
+
 type KbdInput struct {
 	typ uint32
 	ki  KEYBDINPUT
