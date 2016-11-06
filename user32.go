@@ -924,44 +924,37 @@ func ChangeDisplaySettingsEx(szDeviceName *uint16, devMode *DEVMODE, hwnd HWND, 
 
 func SendInput(inputs []INPUT) uint32 {
   var err error
-  var validInputs [][INPUT_MAX_SIZE]byte
+  var validInputs []MouseInput
 
 	for _, oneInput := range inputs {
     inputBuffer := &bytes.Buffer{}
+    input := MouseInput{typ: oneInput.Type}
 		//input := C.INPUT{_type: C.DWORD(oneInput.Type)}
-
-    err = binary.Write(inputBuffer, binary.LittleEndian, oneInput.Type)
-    if err != nil {
-      panic(err)
-    }
 
 		switch oneInput.Type {
 		case INPUT_MOUSE:
-      err = binary.Write(inputBuffer, binary.LittleEndian, oneInput.Mi)
+      input
+      input.mi = oneInput.Mi
 			//(*MouseInput)(unsafe.Pointer(&input)).mi = oneInput.Mi
 		case INPUT_KEYBOARD:
-      err = binary.Write(inputBuffer, binary.LittleEndian, oneInput.Ki)
-			//(*KbdInput)(unsafe.Pointer(&input)).ki = oneInput.Ki
+      (*KbdInput)(unsafe.Pointer(&input)).ki = oneInput.Ki
 		case INPUT_HARDWARE:
-      err = binary.Write(inputBuffer, binary.LittleEndian, oneInput.Hi)
-			//(*HardwareInput)(unsafe.Pointer(&input)).hi = oneInput.Hi
+			(*HardwareInput)(unsafe.Pointer(&input)).hi = oneInput.Hi
 		default:
 			panic("unkown type")
 		}
 
-    if err != nil { panic(err) }
-
-    var inputsArray [INPUT_MAX_SIZE]byte
-    copy(inputsArray[:], inputBuffer.Bytes())
-
-		validInputs = append(validInputs, inputsArray)
+		validInputs = append(validInputs, input)
 	}
 
-	ret, _, _ := procSendInput.Call(
+	ret, _, err := procSendInput.Call(
 		uintptr(len(validInputs)),
 		uintptr(unsafe.Pointer(&validInputs[0])),
-		uintptr(INPUT_MAX_SIZE),
+		uintptr(unsafe.Sizeof(input)),
 	)
+
+  if err != nil { panic(err) }
+
 	return uint32(ret)
 }
 
