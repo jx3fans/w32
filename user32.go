@@ -8,8 +8,6 @@ import (
 	"fmt"
 	"syscall"
 	"unsafe"
-  "encoding/binary"
-  "bytes"
 )
 
 var (
@@ -927,13 +925,11 @@ func SendInput(inputs []INPUT) uint32 {
   var validInputs []MouseInput
 
 	for _, oneInput := range inputs {
-    inputBuffer := &bytes.Buffer{}
     input := MouseInput{typ: oneInput.Type}
 		//input := C.INPUT{_type: C.DWORD(oneInput.Type)}
 
 		switch oneInput.Type {
 		case INPUT_MOUSE:
-      input
       input.mi = oneInput.Mi
 			//(*MouseInput)(unsafe.Pointer(&input)).mi = oneInput.Mi
 		case INPUT_KEYBOARD:
@@ -950,7 +946,7 @@ func SendInput(inputs []INPUT) uint32 {
 	ret, _, err := procSendInput.Call(
 		uintptr(len(validInputs)),
 		uintptr(unsafe.Pointer(&validInputs[0])),
-		uintptr(unsafe.Sizeof(input)),
+		uintptr(unsafe.Sizeof(MouseInput{})),
 	)
 
   if err != nil { panic(err) }
