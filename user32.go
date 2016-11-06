@@ -5,12 +5,11 @@
 package w32
 
 import (
-	// #include <wtypes.h>
-	// #include <winable.h>
-	"C"
 	"fmt"
 	"syscall"
 	"unsafe"
+  "encoding/binary"
+  "bytes"
 )
 
 var (
@@ -924,29 +923,51 @@ func ChangeDisplaySettingsEx(szDeviceName *uint16, devMode *DEVMODE, hwnd HWND, 
 }
 
 func SendInput(inputs []INPUT) uint32 {
-	var validInputs []C.INPUT
+  var err error
+  var size int
+
+  smi, ski, shi := sizeof(MouseInput), sizeof(KbdInputf), sizeof(HardwareInput)
+  maxSize := smi
+  if ski > maxSize { maxSize := ski }
+  if shi > maxSize { maxSize := shi }
+  var validInputs [][maxSize]byte
+
 
 	for _, oneInput := range inputs {
-		input := C.INPUT{_type: C.DWORD(oneInput.Type)}
+    inputBuffer := &bytes.Buffer{}
+		//input := C.INPUT{_type: C.DWORD(oneInput.Type)}
 
 		switch oneInput.Type {
 		case INPUT_MOUSE:
-			(*MouseInput)(unsafe.Pointer(&input)).mi = oneInput.Mi
+      input := MouseInput{typ: oneInput.Type, mi: oneInput.Mi}
+      size, err = binary.Write(inputBuffer, binary.LittleEndian, input)
+			//(*MouseInput)(unsafe.Pointer(&input)).mi = oneInput.Mi
 		case INPUT_KEYBOARD:
-			(*KbdInput)(unsafe.Pointer(&input)).ki = oneInput.Ki
+      input := KbdInput{typ: oneInput.Type, ki: oneInput.Ki}
+      size, err = binary.Write(inputBuffer, binary.LittleEndian, input)
+			//(*KbdInput)(unsafe.Pointer(&input)).ki = oneInput.Ki
 		case INPUT_HARDWARE:
-			(*HardwareInput)(unsafe.Pointer(&input)).hi = oneInput.Hi
+      input := HardwareInput{typ: oneInput.Type, hi: oneInput.Hi}
+      size, err = binary.Write(inputBuffer, binary.LittleEndian, input)
+			//(*HardwareInput)(unsafe.Pointer(&input)).hi = oneInput.Hi
 		default:
 			panic("unkown type")
 		}
 
-		validInputs = append(validInputs, input)
+    if err != nil { panic(err) }
+
+    padding := make([]byte, maxSize - size)
+    _, err = binary.Write(inputBuffer, binary.LittleEndian, padding)
+
+    if err != nil { panic(err) }
+
+		validInputs = append(validInputs, inputBuffer.Bytes())
 	}
 
 	ret, _, _ := procSendInput.Call(
 		uintptr(len(validInputs)),
 		uintptr(unsafe.Pointer(&validInputs[0])),
-		uintptr(unsafe.Sizeof(C.INPUT{})),
+		uintptr(maxSize),
 	)
 	return uint32(ret)
 }
