@@ -62,12 +62,12 @@ var (
 	procSwapBuffers               = modgdi32.NewProc("SwapBuffers")
 )
 
-func GetDeviceCaps(hdc HDC, index int32) int {
+func GetDeviceCaps(hdc HDC, index int32) int32 {
 	ret, _, _ := procGetDeviceCaps.Call(
 		uintptr(hdc),
 		uintptr(index))
 
-	return int(ret)
+	return int32(ret)
 }
 
 func DeleteObject(hObject HGDIOBJ) bool {
@@ -165,7 +165,7 @@ func CreateDC(lpszDriver, lpszDevice, lpszOutput *uint16, lpInitData *DEVMODE) H
 	return HDC(ret)
 }
 
-func CreateDIBSection(hdc HDC, pbmi *BITMAPINFO, iUsage uint, ppvBits *unsafe.Pointer, hSection HANDLE, dwOffset uint) HBITMAP {
+func CreateDIBSection(hdc HDC, pbmi *BITMAPINFO, iUsage uint32, ppvBits *unsafe.Pointer, hSection HANDLE, dwOffset uint32) HBITMAP {
 	ret, _, _ := procCreateDIBSection.Call(
 		uintptr(hdc),
 		uintptr(unsafe.Pointer(pbmi)),
@@ -369,7 +369,7 @@ func SelectObject(hdc HDC, hgdiobj HGDIOBJ) HGDIOBJ {
 	return HGDIOBJ(ret)
 }
 
-func SetBkMode(hdc HDC, iBkMode int) int {
+func SetBkMode(hdc HDC, iBkMode int32) int {
 	ret, _, _ := procSetBkMode.Call(
 		uintptr(hdc),
 		uintptr(iBkMode))

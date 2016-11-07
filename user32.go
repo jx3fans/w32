@@ -321,13 +321,13 @@ func MoveWindow(hwnd HWND, x, y, width, height int32, repaint bool) bool {
 
 }
 
-func ScreenToClient(hwnd HWND, x, y int) (X, Y int, ok bool) {
-	pt := POINT{X: int32(x), Y: int32(y)}
+func ScreenToClient(hwnd HWND, x, y int32) (X, Y int32, ok bool) {
+	pt := POINT{X: x, Y: y}
 	ret, _, _ := procScreenToClient.Call(
 		uintptr(hwnd),
 		uintptr(unsafe.Pointer(&pt)))
 
-	return int(pt.X), int(pt.Y), ret != 0
+	return pt.X, pt.Y, ret != 0
 }
 
 func CallWindowProc(preWndProc uintptr, hwnd HWND, msg uint32, wParam, lParam uintptr) uintptr {
@@ -472,11 +472,11 @@ func MessageBox(hwnd HWND, title, caption string, flags uint32) int {
 	return int(ret)
 }
 
-func GetSystemMetrics(index int32) int {
+func GetSystemMetrics(index int32) int32 {
 	ret, _, _ := procGetSystemMetrics.Call(
 		uintptr(index))
 
-	return int(ret)
+	return int32(ret)
 }
 
 func CopyRect(dst, src *RECT) bool {
@@ -495,7 +495,7 @@ func EqualRect(rect1, rect2 *RECT) bool {
 	return ret != 0
 }
 
-func InflateRect(rect *RECT, dx, dy int) bool {
+func InflateRect(rect *RECT, dx, dy int32) bool {
 	ret, _, _ := procInflateRect.Call(
 		uintptr(unsafe.Pointer(rect)),
 		uintptr(dx),
@@ -530,7 +530,7 @@ func OffsetRect(rect *RECT, dx, dy int32) bool {
 }
 
 func PtInRect(rect *RECT, x, y int32) bool {
-	pt := POINT{X: int32(x), Y: int32(y)}
+	pt := POINT{X: x, Y: y}
 	ret, _, _ := procPtInRect.Call(
 		uintptr(unsafe.Pointer(rect)),
 		uintptr(unsafe.Pointer(&pt)))
@@ -614,14 +614,14 @@ func DrawIcon(hDC HDC, x, y int32, hIcon HICON) bool {
 	return ret != 0
 }
 
-func ClientToScreen(hwnd HWND, x, y int) (int, int) {
-	pt := POINT{X: int32(x), Y: int32(y)}
+func ClientToScreen(hwnd HWND, x, y int32) (int32, int32) {
+	pt := POINT{X: x, Y: y}
 
 	procClientToScreen.Call(
 		uintptr(hwnd),
 		uintptr(unsafe.Pointer(&pt)))
 
-	return int(pt.X), int(pt.Y)
+	return pt.X, pt.Y
 }
 
 func IsDialogMessage(hwnd HWND, msg *MSG) bool {

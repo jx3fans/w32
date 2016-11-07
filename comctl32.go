@@ -52,14 +52,14 @@ func ImageList_Destroy(himl HIMAGELIST) bool {
 	return ret != 0
 }
 
-func ImageList_GetImageCount(himl HIMAGELIST) int {
+func ImageList_GetImageCount(himl HIMAGELIST) int32 {
 	ret, _, _ := procImageList_GetImageCount.Call(
 		uintptr(himl))
 
-	return int(ret)
+	return int32(ret)
 }
 
-func ImageList_SetImageCount(himl HIMAGELIST, uNewCount uint) bool {
+func ImageList_SetImageCount(himl HIMAGELIST, uNewCount uint32) bool {
 	ret, _, _ := procImageList_SetImageCount.Call(
 		uintptr(himl),
 		uintptr(uNewCount))
@@ -89,7 +89,7 @@ func ImageList_AddIcon(himl HIMAGELIST, hicon HICON) int {
 	return ImageList_ReplaceIcon(himl, -1, hicon)
 }
 
-func ImageList_Remove(himl HIMAGELIST, i int) bool {
+func ImageList_Remove(himl HIMAGELIST, i int32) bool {
 	ret, _, _ := procImageList_Remove.Call(
 		uintptr(himl),
 		uintptr(i))
