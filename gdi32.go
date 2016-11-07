@@ -62,7 +62,7 @@ var (
 	procSwapBuffers               = modgdi32.NewProc("SwapBuffers")
 )
 
-func GetDeviceCaps(hdc HDC, index int) int {
+func GetDeviceCaps(hdc HDC, index int32) int {
 	ret, _, _ := procGetDeviceCaps.Call(
 		uintptr(hdc),
 		uintptr(index))
@@ -91,7 +91,7 @@ func AbortDoc(hdc HDC) int {
 	return int(ret)
 }
 
-func BitBlt(hdcDest HDC, nXDest, nYDest, nWidth, nHeight int, hdcSrc HDC, nXSrc, nYSrc int, dwRop uint) {
+func BitBlt(hdcDest HDC, nXDest, nYDest, nWidth, nHeight int32, hdcSrc HDC, nXSrc, nYSrc int32, dwRop uint32) {
 	ret, _, _ := procBitBlt.Call(
 		uintptr(hdcDest),
 		uintptr(nXDest),
@@ -108,7 +108,7 @@ func BitBlt(hdcDest HDC, nXDest, nYDest, nWidth, nHeight int, hdcSrc HDC, nXSrc,
 	}
 }
 
-func PatBlt(hdc HDC, nXLeft, nYLeft, nWidth, nHeight int, dwRop uint) {
+func PatBlt(hdc HDC, nXLeft, nYLeft, nWidth, nHeight int32, dwRop uint32) {
 	ret, _, _ := procPatBlt.Call(
 		uintptr(hdc),
 		uintptr(nXLeft),
@@ -211,7 +211,7 @@ func DeleteEnhMetaFile(hemf HENHMETAFILE) bool {
 	return ret != 0
 }
 
-func Ellipse(hdc HDC, nLeftRect, nTopRect, nRightRect, nBottomRect int) bool {
+func Ellipse(hdc HDC, nLeftRect, nTopRect, nRightRect, nBottomRect int32) bool {
 	ret, _, _ := procEllipse.Call(
 		uintptr(hdc),
 		uintptr(nLeftRect),
@@ -236,7 +236,7 @@ func EndPage(hdc HDC) int {
 	return int(ret)
 }
 
-func ExtCreatePen(dwPenStyle, dwWidth uint, lplb *LOGBRUSH, dwStyleCount uint, lpStyle *uint) HPEN {
+func ExtCreatePen(dwPenStyle, dwWidth uint32, lplb *LOGBRUSH, dwStyleCount uint32, lpStyle *uint32) HPEN {
 	ret, _, _ := procExtCreatePen.Call(
 		uintptr(dwPenStyle),
 		uintptr(dwWidth),
@@ -254,7 +254,7 @@ func GetEnhMetaFile(lpszMetaFile *uint16) HENHMETAFILE {
 	return HENHMETAFILE(ret)
 }
 
-func GetEnhMetaFileHeader(hemf HENHMETAFILE, cbBuffer uint, lpemh *ENHMETAHEADER) uint {
+func GetEnhMetaFileHeader(hemf HENHMETAFILE, cbBuffer uint32, lpemh *ENHMETAHEADER) uint {
 	ret, _, _ := procGetEnhMetaFileHeader.Call(
 		uintptr(hemf),
 		uintptr(cbBuffer),
@@ -272,14 +272,14 @@ func GetObject(hgdiobj HGDIOBJ, cbBuffer uintptr, lpvObject unsafe.Pointer) int 
 	return int(ret)
 }
 
-func GetStockObject(fnObject int) HGDIOBJ {
+func GetStockObject(fnObject int32) HGDIOBJ {
 	ret, _, _ := procGetDeviceCaps.Call(
 		uintptr(fnObject))
 
 	return HGDIOBJ(ret)
 }
 
-func GetTextExtentExPoint(hdc HDC, lpszStr *uint16, cchString, nMaxExtent int, lpnFit, alpDx *int, lpSize *SIZE) bool {
+func GetTextExtentExPoint(hdc HDC, lpszStr *uint16, cchString, nMaxExtent int32, lpnFit, alpDx *int32, lpSize *SIZE) bool {
 	ret, _, _ := procGetTextExtentExPoint.Call(
 		uintptr(hdc),
 		uintptr(unsafe.Pointer(lpszStr)),
@@ -292,7 +292,7 @@ func GetTextExtentExPoint(hdc HDC, lpszStr *uint16, cchString, nMaxExtent int, l
 	return ret != 0
 }
 
-func GetTextExtentPoint32(hdc HDC, lpString *uint16, c int, lpSize *SIZE) bool {
+func GetTextExtentPoint32(hdc HDC, lpString *uint16, c int32, lpSize *SIZE) bool {
 	ret, _, _ := procGetTextExtentPoint32.Call(
 		uintptr(hdc),
 		uintptr(unsafe.Pointer(lpString)),
@@ -310,7 +310,7 @@ func GetTextMetrics(hdc HDC, lptm *TEXTMETRIC) bool {
 	return ret != 0
 }
 
-func LineTo(hdc HDC, nXEnd, nYEnd int) bool {
+func LineTo(hdc HDC, nXEnd, nYEnd int32) bool {
 	ret, _, _ := procLineTo.Call(
 		uintptr(hdc),
 		uintptr(nXEnd),
@@ -319,7 +319,7 @@ func LineTo(hdc HDC, nXEnd, nYEnd int) bool {
 	return ret != 0
 }
 
-func MoveToEx(hdc HDC, x, y int, lpPoint *POINT) bool {
+func MoveToEx(hdc HDC, x, y int32, lpPoint *POINT) bool {
 	ret, _, _ := procMoveToEx.Call(
 		uintptr(hdc),
 		uintptr(x),
@@ -338,7 +338,7 @@ func PlayEnhMetaFile(hdc HDC, hemf HENHMETAFILE, lpRect *RECT) bool {
 	return ret != 0
 }
 
-func Rectangle(hdc HDC, nLeftRect, nTopRect, nRightRect, nBottomRect int) bool {
+func Rectangle(hdc HDC, nLeftRect, nTopRect, nRightRect, nBottomRect int32) bool {
 	ret, _, _ := procRectangle.Call(
 		uintptr(hdc),
 		uintptr(nLeftRect),
@@ -381,7 +381,7 @@ func SetBkMode(hdc HDC, iBkMode int) int {
 	return int(ret)
 }
 
-func SetBrushOrgEx(hdc HDC, nXOrg, nYOrg int, lppt *POINT) bool {
+func SetBrushOrgEx(hdc HDC, nXOrg, nYOrg int32, lppt *POINT) bool {
 	ret, _, _ := procSetBrushOrgEx.Call(
 		uintptr(hdc),
 		uintptr(nXOrg),
@@ -391,7 +391,7 @@ func SetBrushOrgEx(hdc HDC, nXOrg, nYOrg int, lppt *POINT) bool {
 	return ret != 0
 }
 
-func SetStretchBltMode(hdc HDC, iStretchMode int) int {
+func SetStretchBltMode(hdc HDC, iStretchMode int32) int {
 	ret, _, _ := procSetStretchBltMode.Call(
 		uintptr(hdc),
 		uintptr(iStretchMode))
@@ -438,7 +438,7 @@ func StartPage(hdc HDC) int {
 	return int(ret)
 }
 
-func StretchBlt(hdcDest HDC, nXOriginDest, nYOriginDest, nWidthDest, nHeightDest int, hdcSrc HDC, nXOriginSrc, nYOriginSrc, nWidthSrc, nHeightSrc int, dwRop uint) {
+func StretchBlt(hdcDest HDC, nXOriginDest, nYOriginDest, nWidthDest, nHeightDest int32, hdcSrc HDC, nXOriginSrc, nYOriginSrc, nWidthSrc, nHeightSrc int32, dwRop uint32) {
 	ret, _, _ := procStretchBlt.Call(
 		uintptr(hdcDest),
 		uintptr(nXOriginDest),
@@ -457,7 +457,7 @@ func StretchBlt(hdcDest HDC, nXOriginDest, nYOriginDest, nWidthDest, nHeightDest
 	}
 }
 
-func SetDIBitsToDevice(hdc HDC, xDest, yDest, dwWidth, dwHeight, xSrc, ySrc int, uStartScan, cScanLines uint, lpvBits []byte, lpbmi *BITMAPINFO, fuColorUse uint) int {
+func SetDIBitsToDevice(hdc HDC, xDest, yDest, dwWidth, dwHeight, xSrc, ySrc int32, uStartScan, cScanLines uint32, lpvBits []byte, lpbmi *BITMAPINFO, fuColorUse uint32) int {
 	ret, _, _ := procSetDIBitsToDevice.Call(
 		uintptr(hdc),
 		uintptr(xDest),
@@ -483,7 +483,7 @@ func ChoosePixelFormat(hdc HDC, pfd *PIXELFORMATDESCRIPTOR) int {
 	return int(ret)
 }
 
-func DescribePixelFormat(hdc HDC, iPixelFormat int, nBytes uint, pfd *PIXELFORMATDESCRIPTOR) int {
+func DescribePixelFormat(hdc HDC, iPixelFormat int32, nBytes uint32, pfd *PIXELFORMATDESCRIPTOR) int {
 	ret, _, _ := procDescribePixelFormat.Call(
 		uintptr(hdc),
 		uintptr(iPixelFormat),
@@ -509,7 +509,7 @@ func GetPixelFormat(hdc HDC) int {
 	return int(ret)
 }
 
-func SetPixelFormat(hdc HDC, iPixelFormat int, pfd *PIXELFORMATDESCRIPTOR) bool {
+func SetPixelFormat(hdc HDC, iPixelFormat int32, pfd *PIXELFORMATDESCRIPTOR) bool {
 	ret, _, _ := procSetPixelFormat.Call(
 		uintptr(hdc),
 		uintptr(iPixelFormat),

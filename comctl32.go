@@ -30,7 +30,7 @@ func InitCommonControlsEx(lpInitCtrls *INITCOMMONCONTROLSEX) bool {
 	return ret != 0
 }
 
-func ImageList_Create(cx, cy int, flags uint, cInitial, cGrow int) HIMAGELIST {
+func ImageList_Create(cx, cy int32, flags uint32, cInitial, cGrow int32) HIMAGELIST {
 	ret, _, _ := procImageList_Create.Call(
 		uintptr(cx),
 		uintptr(cy),
@@ -76,7 +76,7 @@ func ImageList_Add(himl HIMAGELIST, hbmImage, hbmMask HBITMAP) int {
 	return int(ret)
 }
 
-func ImageList_ReplaceIcon(himl HIMAGELIST, i int, hicon HICON) int {
+func ImageList_ReplaceIcon(himl HIMAGELIST, i int32, hicon HICON) int {
 	ret, _, _ := procImageList_ReplaceIcon.Call(
 		uintptr(himl),
 		uintptr(i),

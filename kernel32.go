@@ -56,7 +56,7 @@ func GetModuleHandle(modulename string) HINSTANCE {
 	return HINSTANCE(ret)
 }
 
-func MulDiv(number, numerator, denominator int) int {
+func MulDiv(number, numerator, denominator int32) int {
 	ret, _, _ := procMulDiv.Call(
 		uintptr(number),
 		uintptr(numerator),
@@ -101,7 +101,7 @@ func Lstrcpy(buf []uint16, lpString *uint16) {
 		uintptr(unsafe.Pointer(lpString)))
 }
 
-func GlobalAlloc(uFlags uint, dwBytes uint32) HGLOBAL {
+func GlobalAlloc(uFlags uint32, dwBytes uint32) HGLOBAL {
 	ret, _, _ := procGlobalAlloc.Call(
 		uintptr(uFlags),
 		uintptr(dwBytes))
@@ -209,7 +209,7 @@ func OpenProcess(desiredAccess uint32, inheritHandle bool, processId uint32) HAN
 	return HANDLE(ret)
 }
 
-func TerminateProcess(hProcess HANDLE, uExitCode uint) bool {
+func TerminateProcess(hProcess HANDLE, uExitCode uint32) bool {
 	ret, _, _ := procTerminateProcess.Call(
 		uintptr(hProcess),
 		uintptr(uExitCode))
