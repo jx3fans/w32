@@ -67,25 +67,25 @@ func ImageList_SetImageCount(himl HIMAGELIST, uNewCount uint32) bool {
 	return ret != 0
 }
 
-func ImageList_Add(himl HIMAGELIST, hbmImage, hbmMask HBITMAP) int {
+func ImageList_Add(himl HIMAGELIST, hbmImage, hbmMask HBITMAP) int32 {
 	ret, _, _ := procImageList_Add.Call(
 		uintptr(himl),
 		uintptr(hbmImage),
 		uintptr(hbmMask))
 
-	return int(ret)
+	return int32(ret)
 }
 
-func ImageList_ReplaceIcon(himl HIMAGELIST, i int32, hicon HICON) int {
+func ImageList_ReplaceIcon(himl HIMAGELIST, i int32, hicon HICON) int32 {
 	ret, _, _ := procImageList_ReplaceIcon.Call(
 		uintptr(himl),
 		uintptr(i),
 		uintptr(hicon))
 
-	return int(ret)
+	return int32(ret)
 }
 
-func ImageList_AddIcon(himl HIMAGELIST, hicon HICON) int {
+func ImageList_AddIcon(himl HIMAGELIST, hicon HICON) int32 {
 	return ImageList_ReplaceIcon(himl, -1, hicon)
 }
 
