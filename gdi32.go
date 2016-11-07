@@ -369,7 +369,7 @@ func SelectObject(hdc HDC, hgdiobj HGDIOBJ) HGDIOBJ {
 	return HGDIOBJ(ret)
 }
 
-func SetBkMode(hdc HDC, iBkMode int32) int {
+func SetBkMode(hdc HDC, iBkMode int32) int32 {
 	ret, _, _ := procSetBkMode.Call(
 		uintptr(hdc),
 		uintptr(iBkMode))
@@ -378,7 +378,7 @@ func SetBkMode(hdc HDC, iBkMode int32) int {
 		panic("SetBkMode failed")
 	}
 
-	return int(ret)
+	return int32(ret)
 }
 
 func SetBrushOrgEx(hdc HDC, nXOrg, nYOrg int32, lppt *POINT) bool {
