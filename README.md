@@ -1,8 +1,6 @@
-*w32* is a wrapper of windows apis for the Go Programming Language. 
+*w32* is a wrapper of windows apis for the Go Programming Language. This repository is a fork of https://github.com/AllenDang/w32 and removes dependency to _cgo_ on Windows and provides some fixes for x64 compatibility. 
 
-(originally a fork from https://github.com/AllenDang/w32)
-
-It wraps win32 apis to "Go style" to make them easier to use. This fork contains fixes for x64 and some other improvements.
+It wraps win32 apis to "Go style" to make them easier to use.
 
 ##Setup
 
